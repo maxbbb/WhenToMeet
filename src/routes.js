@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ReactRouter, Router, Route, Link, browserHistory,hashHistory } from 'react-router'
-import Home from './components/Main'
+import Home from './components/Home'
 import Availability from './components/Availability'
 import Start from './components/Start'
 import Results from './components/Results'
