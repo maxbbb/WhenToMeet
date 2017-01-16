@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../styling/Home.css';
 import { Link } from 'react-router';
+var axios = require('axios');
 var firebase = require('firebase');
 // import {backendInit} from '../backend.js';
 //const auth = firebase.auth()
@@ -46,26 +47,24 @@ class Home extends Component {
       // .catch(e => console.log(e.message))
     })
       .then(function (res) {
-        var data = new FormData();
-        data.append("json", JSON.stringify({ name: res.displayName, id: res.uid }));
-        fetch("http://localhost:6970/user", {
-          method: "POST",
-          mode: "no-cors",
-          body: data
+        const api = axios.create({
+          responseType: "json"
         });
+        api.post('http://localhost:6969/user', { name: res.displayName, id: res.uid });
         this.props.router.push({
           pathname: '/Start',
           query: {
-            username: res.displayName
-        }});
+            username: res.displayName,
+            meetingId: this.props.location.query.meetingId
+          }
+        });
       }.bind(this));
   }
 
   render() {
     return (
-      <div>
-        <h1> Welcome to Meeting Planner!</h1> <br />
-        <button onClick={this.authenticate}>Register</button>
+      <div style={{width: '100%', textAlign: 'center', padding: '30px'}}>
+        <h1> Welcome to MeetUp!</h1> <br />
         <button onClick={this.authenticate}>Sign In</button>
       </div>
     );

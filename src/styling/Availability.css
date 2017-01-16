@@ -1,0 +1,21 @@
+
+
+.availability {
+    width: 60%;
+    text-align: center;
+    padding: 30px;
+    margin: auto
+}
+
+.timeslot {
+    border: 1px solid silver;
+    padding: 10px;
+}
+
+.active {
+    background-color: salmon
+}
+
+.timeslot:hover {
+    background-color: lightsalmon
+}

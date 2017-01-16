@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
 import { browserHistory, Router, Route, Link } from 'react-router'
+var axios = require('axios')
+
+const api = axios.create({
+  responseType: "json"
+});
+
 
 class Start extends Component {
   constructor(props) {
@@ -17,39 +23,41 @@ class Start extends Component {
 
   createMeeting(e) {
     e.preventDefault()
-    var meetingId = Math.floor(Math.random()*1000000)
+    var meetingId = Math.floor(Math.random() * 1000000)
     //crypto.randomBytes(10).toString('hex');
     var meetingDetails = {
-      meetingId: {
         title: this.state.fieldValue,
         creator: this.props.location.query.username,
         id: meetingId,
-        rsvpList: []
+        rsvpList: [],
+        messageList: []
       }
-    }
-    console.log("Meeting Created: ", meetingDetails)
+    api.post("http://localhost:6969/meeting/create", meetingDetails)
     this.props.router.push({
-          pathname: '/Availability',
-          query: {
-            username: this.props.location.query.username,
-            meetingId: meetingId
-        }});
+      pathname: '/Availability',
+      query: {
+        username: this.props.location.query.username,
+        meetingId: meetingId,
+        creator: true
+      }
+    });
   }
 
   rsvp(e) {
     e.preventDefault()
     console.log("RSVP Registered: " + this.state.fieldValue)
     this.props.router.push({
-          pathname: '/Availability',
-          query: {
-            username: this.props.location.query.username,
-            meetingId: this.state.fieldValue
-        }});
+      pathname: '/Availability',
+      query: {
+        username: this.props.location.query.username,
+        meetingId: this.state.fieldValue
+      }
+    });
   }
 
   render() {
     return (
-      <div>
+      <div style={{width: '100%', textAlign: 'center', padding: '30px'}}>
         <h1> Let's start planning.</h1> <br />
         <h3> Create Meeting </h3>
         <form onSubmit={this.createMeeting} className="create-meeting">
@@ -59,7 +67,7 @@ class Start extends Component {
         <br />
         <h3> RSVP to Meeting </h3>
         <form onSubmit={this.rsvp} className="rsvp">
-          <input type="text" onChange={this.logName} name="meeting" placeholder="Enter meeting ID" required="required" autoComplete="off" spellCheck="false" />
+          <input type="text" value={this.props.location.query.meetingId} onChange={this.logName} name="meeting" placeholder="Enter meeting ID" required="required" autoComplete="off" spellCheck="false" />
           <input type="submit" className="submit"></input>
         </form>
       </div>

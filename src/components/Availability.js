@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
 import { ReactRouter, Router, Route, Link, browserHistory, hashHistory } from 'react-router'
-import { ListGroupItem, Button, ListGroup, Checkbox } from 'react-bootstrap'
+import { ListGroupItem, Button, ListGroup, Checkbox } from 'react-bootstrap';
+import "../styling/Availability.css";
+var axios = require('axios')
+var firebase = require('firebase')
 
-var hours = ['7:00am', '8:00am', '9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm', '6:00pm', '7:00pm', '8:00pm', '9:00pm', '10:00pm', '11:00pm', '12:00am', '1:00am', '2:00am', '3:00am', '4:00am', '5:00am', '6:00am']
+const api = axios.create({
+  responseType: "json"
+});
+
+
+var hours = ['7:00am', '8:00am', '9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm', '6:00pm', '7:00pm', '8:00pm', '9:00pm', '10:00pm', '11:00pm', '12:00am']
 
 class Availability extends Component {
 
@@ -28,32 +36,56 @@ class Availability extends Component {
       user: this.props.location.query.username,
       timeslots: this.state.times
     }
-    console.log("RSVP Times: ", availability)
-    this.props.router.push({
-      pathname: '/Results',
-      query: {
-        meetingId: this.props.location.query.meetingId
-      }
-    });
+    api.post("http://localhost:6969/meeting/rsvp/" + this.props.location.query.meetingId, availability)
+      .then(function (res) {
+        this.props.router.push({
+          pathname: '/Results',
+          query: {
+            username: this.props.location.query.username,
+            meetingId: this.props.location.query.meetingId
+          }
+        });
+      }.bind(this));
   }
 
   render() {
-    return (
-      <div>
-        <ul className='list-group'>
-          {hours.map(function (i) {
-            return (
-              <li>
-                <input type="checkbox" onClick={this.addTime.bind(null, i)}></input>
-                {i}
-                <hr />
-              </li>
-            )
-          }.bind(this))}
-        </ul>
-        <button onClick={this.submitAvailability}> Submit </button>
-      </div>
-    );
+    if (this.props.location.query.creator) {
+      return (
+        <div className="availability">
+          <h1>Fill in your availability!</h1> <br /><br />
+          <h3>After that, send this link to friends so they can fill it out too:</h3>
+          <h5>http://localhost:3000/#/?meetingId={this.props.location.query.meetingId}</h5> <br />
+            {hours.map(function (i) {
+              return (
+                <div>
+                  <div className="timeslot" onClick={this.addTime.bind(null, i)}>
+                  {i}
+                  </div>
+                </div>
+              )
+            }.bind(this))}
+            <br />
+          <button onClick={this.submitAvailability}> Submit </button>
+        </div>
+      );
+    }
+    else {
+      return (
+        <div className="availability">
+          <h1>Fill in your availability!</h1><br />
+            {hours.map(function (i) {
+              return (
+                <div>
+                  <div className="timeslot" onClick={this.addTime.bind(null, i)}>
+                  {i}
+                  </div>
+                </div>
+              )
+            }.bind(this))}
+            <br />
+          <button onClick={this.submitAvailability}> Submit </button>
+        </div>
+      )}
   }
 }
 export default Availability

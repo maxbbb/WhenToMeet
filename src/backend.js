@@ -7,89 +7,98 @@ app.use(bodyParser.json());
 // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
 
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+
+    next();
+}
+
+app.use(allowCrossDomain)
+
 // Keyed with meeting id => meeting detail object.
-let meetingDb = {
+var meetingDb = {
   users: [
     {
       name: '',
       id: '',
     }
   ],
-  meetings: [
-    {
-      meetingID: {
-        title: "Test meeting",
-        creator: "brent@brentbaum.com",
-        id: "test-meeting",
-        rsvpList: [
-          {
-            user: "JGRohrlich",
-            timeslots: ["1:00am", "10:00am", "8:00am", "9:00am", "5:00pm", "4:00pm"]
-          },
-          {
-            user: "XXXXXXXX",
-            timeslots: ["11:00pm", "10:00am", "1:00am", "9:00am", "5:00pm", "4:00pm"]
-          },
-          {
-            user: "YYYYYYY",
-            timeslots: ["2:00pm", "10:00am", "8:00am", "9:00am", "5:00pm", "4:00pm"]
-          },
-          {
-            user: "ZZZZZZZZZ",
-            timeslots: ["1:00pm", "10:00am", "8:00am", "9:00pm", "5:00pm", "4:00am"]
-          },
+  meetings: {
+    '123456': {
+      title: "Test meeting",
+      creator: "brent@brentbaum.com",
+      id: "test-meeting",
+      rsvpList: [
+        {
+          user: "JGRohrlich",
+          timeslots: ["1:00am", "10:00am", "8:00am", "9:00am", "5:00pm", "4:00pm"]
+        },
+        {
+          user: "XXXXXXXX",
+          timeslots: ["11:00pm", "10:00am", "1:00am", "9:00am", "5:00pm", "4:00pm"]
+        },
+        {
+          user: "YYYYYYY",
+          timeslots: ["2:00pm", "10:00am", "8:00am", "9:00am", "5:00pm", "4:00pm"]
+        },
+        {
+          user: "ZZZZZZZZZ",
+          timeslots: ["1:00pm", "10:00am", "8:00am", "9:00pm", "5:00pm", "4:00am"]
+        },
 
-        ],
-        messageList: [
-          {
-            username: "USER",
-            message: "lorem ipsum lorem ipsum lorem ipsum"
-          }
-        ]
-      }
-    },
-  ]
-}
+      ],
+      messageList: [
+        {
+          username: "USER",
+          message: "lorem ipsum lorem ipsum lorem ipsum"
+        }
+      ]
+    }
+  },
 };
-
 
 
 app.post("/user", (req, res) => {
   var user = req.body;
   meetingDb.users.push(user)
-  //add the rsvp contained in req to a the rsvp array of a particular meeting within meetingDb.
-  app.close()
-  return res.send(meetingDb);
+  return res.send(meetingDb.users);
 });
 
+app.post("/meeting/create", (req, res) => {
+  var meetingID = req.body.id
+  meetingDb.meetings[meetingID] = req.body
+  return res.send(meetingDb.meetings);
+});
 
-
-app.get("/meeting/detail/:id", (req, res) => {
-  //access passed meeting id via: req.params.id;
-  return res.send(meetingDb["test-meeting"]);
+app.post("/meeting/rsvp/:id", (req, res) => {
+  meetingDb.meetings[req.params.id].rsvpList.push(req.body)
+  return res.send(meetingDb.meetings[req.params.id]);
 });
 
 app.get("/meeting/availability/:id", (req, res) => {
   //summarize rsvps in that meeting's rsvpList in whatever form makes sense for the client.
-  return res.send({});
+  var ID = req.params.id
+  var data = meetingDb.meetings[ID]
+  console.log(meetingDb.meetings[ID])
+  return res.send(data);
 });
 
-app.post("/meeting/rsvp", (req, res) => {
-  //add the rsvp contained in req to a the rsvp array of a particular meeting within meetingDb.
-  return res.send({});
+app.get("/meeting/messages/:id", (req, res) => {
+  var messages = meetingDb.meetings[req.params.id].messageList
+  return res.send(messages)
 });
 
-app.post("/meeting/create", (req, res) => {
-  //Create a meeting and add it to meetingDb
-  return res.send({});
+app.post("/meeting/messages/:id", (req, res) => {
+  meetingDb.meetings[req.params.id].messageList.push(req.body)
+  var messages = meetingDb.meetings[req.params.id].messageList
+  return res.send(messages)
 });
 
-app.get("/meeting/list", (req, res) => {
-  // Return all meetings in meetingDb.
-  return res.send([]);
-});
 
-const appPort = 6970;
+
+const appPort = 6969;
 
 app.listen(appPort, function () {
   console.log("Meeting finder running on " + appPort);
