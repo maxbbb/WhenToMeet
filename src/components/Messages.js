@@ -15,15 +15,10 @@ class Messages extends Component {
         console.log(this.state.fieldValue)
     };
     componentWillMount() {
-        setInterval(api.get("http://localhost:6969/meeting/messages/" + this.props.id)
+        setInterval(() => api.get("http://localhost:6969/meeting/messages/" + this.props.id)
             .then(function (res) {
                 this.setState(Object.assign({}, this.state, {
-                    allMessages:
-                    res.data.map((i) => (
-                        <div>
-                            {i.username} : {i.message}
-                        </div>
-                    ))
+                    allMessages: res.data
                 })
                 )
         }.bind(this)), 1000)
@@ -36,31 +31,34 @@ class Messages extends Component {
         api.post("http://localhost:6969/meeting/messages/" + this.props.id, message)
             .then(function (res) {
                 this.setState(Object.assign({}, this.state, {
-                    allMessages:
-                    res.data.map((i) => (
-                        <div>
-                            <div style={{ textAlign: (i.username === this.props.user ? 'right' : 'left') }}>
-                                {i.username}
-                            </div>
-                            <div className="message" style={{ backgroundColor: (i.username === this.props.user ? 'lightSalmon' : 'lightGrey') }}>
-                                {i.message}
-                            </div>
-                            <br />
-                        </div>
-                    ))
+                    allMessages: res.data
                 })
                 )
             }.bind(this)).then(function (res) {
-                var elem = document.getElementById('messageBox');
-                elem.scrollTop = elem.scrollHeight;
+        var elem = document.getElementById('messageBox');
+        elem.scrollTop = elem.scrollHeight;
             })
     }
 
     render() {
+      if(!this.state.allMessages)
+        return (
+          <div>Loading...</div>
+        )
         return (
             <div className="messageContainer">
                 <div id='messageBox' className='messageContainer'>
-                    {this.state.allMessages}
+                  {this.state.allMessages && this.state.allMessages.map((i) => (
+                      <div>
+                          <div style={{ textAlign: (i.username === this.props.user ? 'right' : 'left') }}>
+                              {i.username}
+                          </div>
+                          <div className="message" style={{ backgroundColor: (i.username === this.props.user ? 'lightSalmon' : 'lightGrey') }}>
+                              {i.message}
+                          </div>
+                          <br />
+                      </div>
+                  ))}
                 </div>
                 <br />
                 <form onSubmit={this.sendMessage} className="send-message">

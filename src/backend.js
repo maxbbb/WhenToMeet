@@ -7,12 +7,12 @@ app.use(bodyParser.json());
 // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
 
-var allowCrossDomain = function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
 
-  next();
+    next();
 }
 
 app.use(allowCrossDomain)
@@ -73,18 +73,20 @@ app.post("/meeting/create", (req, res) => {
 });
 
 app.post("/meeting/rsvp/:id", (req, res) => {
+
   var info = req.body.timeslots
   var bool = false
-  data = meetingDb.meetings[req.params.id].rsvpList
-  data.forEach(function (i) {
-    if (i.user === req.body.user) {
-      data[data.indexOf(i)].timeslots = info
+  meetingDb.meetings[req.params.id].rsvpList.forEach(function(i) {
+    if (i.user === req.body.user ) {
+      meetingDb.meetings[req.params.id].rsvpList[meetingDb.meetings[req.params.id].rsvpList.indexOf(i)].timeslots = info
       bool = true
+      }
+    })
+
+    if (bool === false) {
+    meetingDb.meetings[req.params.id].rsvpList.push(req.body)
     }
-  })
-  if (bool === false) {
-    data.push(req.body)
-  }
+
   return res.send(meetingDb.meetings[req.params.id]);
 });
 
@@ -107,11 +109,7 @@ app.post("/meeting/messages/:id", (req, res) => {
   return res.send(messages)
 });
 
-app.get("/meeting/name/:id", (req, res) => {
-  return res.send(meetingDb.meetings[req.params.id].title)
-});
-
-
+app.get("/meeting/")
 const appPort = 6969;
 
 app.listen(appPort, function () {

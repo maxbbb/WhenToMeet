@@ -16,7 +16,9 @@ class Results extends Component {
     super(props);
     this.state = {
       timebars: 0,
-      meetingName: ''
+      meetingName: '',
+      meetingId: '',
+      signedIn: false,
     }
     this.authenticate = this.authenticate.bind(this)
   }
@@ -28,7 +30,9 @@ class Results extends Component {
       var user = result.user;
       localStorage.setItem('username', user.displayName)
       return user
-    })
+    }).then(function(res) {
+      this.setState(Object.assign({}, this.state, {signedIn: true}))
+    }.bind(this))
     // .then(function (res) {
     //   this.props.router.push({
     //     pathname: '/Results',
@@ -40,7 +44,10 @@ class Results extends Component {
   }
 
   componentWillMount() {
-    var meetingID = localStorage.getItem("meetingId")
+    var meetingID = (!this.props.location.query.meetingId ? localStorage.getItem("meetingId"): this.props.location.query.meetingId )
+    console.log(meetingID)
+    this.setState(Object.assign({}, this.state, {meetingId: meetingID}))
+    //var meetingID = localStorage.getItem("meetingId")
     var slots = [
       { time: '7:00am', count: 0, people: [] },
       { time: '8:00am', count: 0, people: [] },
@@ -99,12 +106,12 @@ class Results extends Component {
   }
 
   render() {
-    if (!localStorage.getItem('username')) {
+    if (!localStorage.getItem('username') && this.state.signedIn === false) {
       return (
         <div className="background">
           <div className='centered-title' style={{ width: '95%' }}>
             <h1 className='title'> {this.state.meetingName} </h1> <br />
-            You're not signed in. Please <button className="title-button" onClick={this.authenticate}>Sign In</button>
+            You're not signed in. Please <br/> <br/> <button className="title-button" onClick={this.authenticate}>Sign In</button>
           </div>
         </div>
       )
@@ -117,7 +124,7 @@ class Results extends Component {
           <div className="timebars">
             {this.state.timebars}
           </div>
-          <Messages user={localStorage.getItem('username')} id={localStorage.getItem('meetingId')} /> <br />
+          <Messages user={localStorage.getItem('username')} id={this.state.meetingId} /> <br />
           <br />
           <div className="link">
             <h4>Want to change your availability? click <a href={'http://localhost:3000/Availability?meetingId=' + localStorage.getItem('meetingId')}>here</a></h4>
@@ -130,4 +137,4 @@ class Results extends Component {
   }
 }
 
-export default Results 
+export default Results
