@@ -51,21 +51,21 @@ class Home extends Component {
           responseType: "json"
         });
         api.post('http://localhost:6969/user', { name: res.displayName, id: res.uid });
+        localStorage.setItem('username', res.displayName)
+        localStorage.setItem('meetingId', (!this.props.location.query.meetingId? "": this.props.location.query.meetingId))
         this.props.router.push({
           pathname: '/Start',
-          query: {
-            username: res.displayName,
-            meetingId: this.props.location.query.meetingId
-          }
         });
       }.bind(this));
   }
 
   render() {
     return (
-      <div style={{width: '100%', textAlign: 'center', padding: '30px'}}>
-        <h1> Welcome to MeetUp!</h1> <br />
-        <button onClick={this.authenticate}>Sign In</button>
+      <div className="background">
+        <div className='centered-title'>
+          <h1 className="big-title" style={{ marginBottom: '80px' }}> Welcome to Meetomorow!</h1> <br />
+          <button className="title-button" onClick={this.authenticate}>Sign In</button>
+        </div>
       </div>
     );
   }

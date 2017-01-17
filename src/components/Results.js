@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import Messages from './Messages.js';
 import '../styling/Results.css';
+import 'hint.css/hint.css'
 //import Bars from './Bars.js';
 var firebase = require('firebase');
 var axios = require('axios')
@@ -14,7 +15,8 @@ class Results extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      timebars: 0
+      timebars: 0,
+      meetingName: ''
     }
     this.authenticate = this.authenticate.bind(this)
   }
@@ -24,51 +26,52 @@ class Results extends Component {
     firebase.auth().signInWithPopup(provider).then(function (result) {
       var token = result.credential.accessToken;
       var user = result.user;
-      console.log(user.displayName, user.uid)
+      localStorage.setItem('username', user.displayName)
       return user
     })
-      .then(function (res) {
-        this.props.router.push({
-          pathname: '/Results',
-          query: {
-            username: res.displayName,
-            meetingId: this.props.location.query.meetingId
-          }
-        });
-      }.bind(this));
+    // .then(function (res) {
+    //   this.props.router.push({
+    //     pathname: '/Results',
+    //     query: {
+    //       meetingId: this.props.location.query.meetingId
+    //     }
+    //   });
+    // }.bind(this));
   }
 
   componentWillMount() {
+    var meetingID = localStorage.getItem("meetingId")
     var slots = [
-      { time: '7:00am', count: 0 },
-      { time: '8:00am', count: 0 },
-      { time: '9:00am', count: 0 },
-      { time: '10:00am', count: 0 },
-      { time: '11:00am', count: 0 },
-      { time: '12:00pm', count: 0 },
-      { time: '1:00pm', count: 0 },
-      { time: '2:00pm', count: 0 },
-      { time: '3:00pm', count: 0 },
-      { time: '4:00pm', count: 0 },
-      { time: '5:00pm', count: 0 },
-      { time: '6:00pm', count: 0 },
-      { time: '7:00pm', count: 0 },
-      { time: '8:00pm', count: 0 },
-      { time: '9:00pm', count: 0 },
-      { time: '10:00pm', count: 0 },
-      { time: '11:00pm', count: 0 },
-      { time: '12:00am', count: 0 },]
+      { time: '7:00am', count: 0, people: [] },
+      { time: '8:00am', count: 0, people: [] },
+      { time: '9:00am', count: 0, people: [] },
+      { time: '10:00am', count: 0, people: [] },
+      { time: '11:00am', count: 0, people: [] },
+      { time: '12:00pm', count: 0, people: [] },
+      { time: '1:00pm', count: 0, people: [] },
+      { time: '2:00pm', count: 0, people: [] },
+      { time: '3:00pm', count: 0, people: [] },
+      { time: '4:00pm', count: 0, people: [] },
+      { time: '5:00pm', count: 0, people: [] },
+      { time: '6:00pm', count: 0, people: [] },
+      { time: '7:00pm', count: 0, people: [] },
+      { time: '8:00pm', count: 0, people: [] },
+      { time: '9:00pm', count: 0, people: [] },
+      { time: '10:00pm', count: 0, people: [] },
+      { time: '11:00pm', count: 0, people: [] },
+      { time: '12:00am', count: 0, people: [] },]
     var numRsvps = 0
-    var meetingID = this.props.location.query.meetingId
     api.get('http://localhost:6969/meeting/availability/' + meetingID)
       .then(function (response) {
         console.log(response.data)
         console.log(numRsvps)
+        this.state.meetingName = response.data.title
         response.data.rsvpList.forEach(function (i) {
           i.timeslots.forEach(function (x) {
             slots.forEach(function (y) {
               if (y.time === x) {
                 y.count++
+                y.people.push(i.user)
               }
             });
           });
@@ -76,44 +79,51 @@ class Results extends Component {
         numRsvps = response.data.rsvpList.length;
         this.setState(Object.assign({}, this.state, {
           timebars: slots.map((slot) => (
-            <div className="slot" style={{ margin: '20px', float: 'left' }}>
-              <div className="time" style={{  }}>
-                <b>{slot.time}</b>, {slot.count} out of {numRsvps} are available.
+            <span className="hint--bottom hint--rounded hint--bounce hint--medium" aria-label={
+              slot.people.map((i) => ('\n' + i + "\n"))}>
+              <div className="slot">
+                <div className="time">
+                  <b>{slot.time}</b>, {slot.count} out of {numRsvps} are available.
               </div>
-              <div className="bar">
-                <div className="fill" style={{width: (slot.count / numRsvps * 400 -4 ) + 'px', backgroundColor: 'green' }}>
+                <div className="bar">
+                  <div className="fill" style={{ width: (slot.count / numRsvps * 100).toString() + '%' }}>
+                  </div>
+                  <br />
                 </div>
-                <br />
               </div>
-            </div>
+            </span>
           )
           )
         }))
-      }.bind(this))
+    }.bind(this))
   }
 
   render() {
-    if (!this.props.location.query.username) {
+    if (!localStorage.getItem('username')) {
       return (
-        <div>
-          <div style={{ width: '60%', textAlign: 'center', padding: '30px', margin: 'auto' }}>
-            <h1> Here's your meetUp! </h1> <br />
-            You're not signed in. Please <button onClick={this.authenticate}>Sign In</button>
+        <div className="background">
+          <div className='centered-title' style={{ width: '95%' }}>
+            <h1 className='title'> {this.state.meetingName} </h1> <br />
+            You're not signed in. Please <button className="title-button" onClick={this.authenticate}>Sign In</button>
           </div>
-          
         </div>
       )
     } else {
       return (
-        <div>
-          <div style={{ width: '60%', textAlign: 'center', padding: '30px', margin: 'auto' }}>
-            <h1> Here's your meetUp! </h1> <br />
+        <div className="background">
+          <div className="centered-title" style={{ width: '95%' }}>
+            <h1 className='title'> {this.state.meetingName} </h1> <br />
           </div>
-          {this.state.timebars}
-          <Messages user={this.props.location.query.username} id={this.props.location.query.meetingId} /> <br />
+          <div className="timebars">
+            {this.state.timebars}
+          </div>
+          <Messages user={localStorage.getItem('username')} id={localStorage.getItem('meetingId')} /> <br />
           <br />
-          <h3>Want to check the status of this meeting later? Use this link: </h3>
-          <h5>http://localhost:3000/#/Results?username={this.props.location.query.username}&meetingId={this.props.location.query.meetingId}</h5>
+          <div className="link">
+            <h4>Want to change your availability? click <a href={'http://localhost:3000/Availability?meetingId=' + localStorage.getItem('meetingId')}>here</a></h4>
+            <h3>Want to check the status of this meeting later? Use this link: </h3>
+            <h5>http://localhost:3000/Results?meetingId={localStorage.getItem('meetingId')}</h5>
+          </div>
         </div>
       )
     }

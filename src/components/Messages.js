@@ -15,7 +15,7 @@ class Messages extends Component {
         console.log(this.state.fieldValue)
     };
     componentWillMount() {
-        api.get("http://localhost:6969/meeting/messages/" + this.props.id)
+        setInterval(api.get("http://localhost:6969/meeting/messages/" + this.props.id)
             .then(function (res) {
                 this.setState(Object.assign({}, this.state, {
                     allMessages:
@@ -26,7 +26,7 @@ class Messages extends Component {
                     ))
                 })
                 )
-            }.bind(this))
+        }.bind(this)), 1000)
     }
     sendMessage(e) {
         e.preventDefault()
@@ -34,16 +34,15 @@ class Messages extends Component {
         x[0].value = ''
         var message = { username: this.props.user, message: this.state.fieldValue }
         api.post("http://localhost:6969/meeting/messages/" + this.props.id, message)
-        api.get("http://localhost:6969/meeting/messages/" + this.props.id)
             .then(function (res) {
                 this.setState(Object.assign({}, this.state, {
                     allMessages:
                     res.data.map((i) => (
                         <div>
-                            <div style={{ textAlign: (i.username === this.props.user ? 'right' : 'left')}}>
+                            <div style={{ textAlign: (i.username === this.props.user ? 'right' : 'left') }}>
                                 {i.username}
                             </div>
-                            <div className="message" style={{ backgroundColor: (i.username === this.props.user ? 'green' : 'grey') }}>
+                            <div className="message" style={{ backgroundColor: (i.username === this.props.user ? 'lightSalmon' : 'lightGrey') }}>
                                 {i.message}
                             </div>
                             <br />
@@ -51,16 +50,22 @@ class Messages extends Component {
                     ))
                 })
                 )
-            }.bind(this))
+            }.bind(this)).then(function (res) {
+                var elem = document.getElementById('messageBox');
+                elem.scrollTop = elem.scrollHeight;
+            })
     }
+
     render() {
         return (
             <div className="messageContainer">
-                {this.state.allMessages}
+                <div id='messageBox' className='messageContainer'>
+                    {this.state.allMessages}
+                </div>
                 <br />
                 <form onSubmit={this.sendMessage} className="send-message">
-                    <input type="text" onChange={this.logMessage} name="message" placeholder="Type in name your message" required="required" autoComplete="off" spellCheck="false" />
-                    <input type="submit" className="submit"></input>
+                    <input type="text" className='message-input' onChange={this.logMessage} name="message" placeholder="Type your message" required="required" autoComplete="off" spellCheck="false" />
+                    <input type="submit" value="Submit" className="submit message-button"></input>
                 </form>
             </div>
         )

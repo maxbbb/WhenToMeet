@@ -1,3 +1,35 @@
+@import url('https://fonts.googleapis.com/css?family=Indie+Flower|Overpass|Oxygen|Quicksand');
+
+* {
+  font-family: 'Oxygen'
+}
+
+.background {
+    background-image: url('../background_720.jpg');
+    background-size: cover;
+    height: 120vh;
+    z-index: -1;
+    background-color: rgba(0,0,0, 0.6)
+}
+
+.title {
+  font-family: 'Indie Flower';
+  font-size: 72px;
+}
+
+.big-title{
+  font-family: 'Indie Flower';
+  font-size: 72px;
+  margin-top: 25%
+}
+
+.centered-title{
+  width: 60%;
+  text-align: center;
+  padding: 30px;
+  margin: auto
+}
+
 .App {
   text-align: center;
 }
@@ -21,4 +53,24 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+.title-button {
+  color: salmon;
+  background-color: white;
+  border: 2px solid salmon;
+  padding: 20px;
+  border-radius: 20px;
+  width: 100px;
+}
+
+.title-button:hover {
+  width: 70%;
+  color: white;
+  background-color: salmon;
+  transition: 0.5s
+}
+
+.title-button:focus {
+  outline: none
 }

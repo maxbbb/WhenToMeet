@@ -32,60 +32,62 @@ class Availability extends Component {
   }
 
   submitAvailability() {
+    console.log(localStorage.getItem('meetingId'))
     var availability = {
-      user: this.props.location.query.username,
+      user: localStorage.getItem('username'),
       timeslots: this.state.times
     }
-    api.post("http://localhost:6969/meeting/rsvp/" + this.props.location.query.meetingId, availability)
+    api.post("http://localhost:6969/meeting/rsvp/" + localStorage.getItem('meetingId'), availability)
       .then(function (res) {
         this.props.router.push({
-          pathname: '/Results',
-          query: {
-            username: this.props.location.query.username,
-            meetingId: this.props.location.query.meetingId
-          }
+          pathname: '/Results'
         });
       }.bind(this));
   }
 
   render() {
-    if (this.props.location.query.creator) {
+    if (localStorage.getItem('creator') === "true") {
       return (
-        <div className="availability">
-          <h1>Fill in your availability!</h1> <br /><br />
-          <h3>After that, send this link to friends so they can fill it out too:</h3>
-          <h5>http://localhost:3000/#/?meetingId={this.props.location.query.meetingId}</h5> <br />
+        <div className="background">
+          <div className="availability">
+            <h1 className='title'>Fill in your availability!</h1><br />
+            <h3>After that, send this link to friends so they can fill it out too:</h3>
+            <h5>http://localhost:3000/?meetingId={localStorage.getItem('meetingId')}</h5> <br />
             {hours.map(function (i) {
               return (
                 <div>
-                  <div className="timeslot" onClick={this.addTime.bind(null, i)}>
-                  {i}
+                  <div className={(this.state.times.indexOf(i) === -1 ? "timeslot" : "timeslot active")} onClick={this.addTime.bind(null, i)}>
+                    {i}
                   </div>
                 </div>
               )
             }.bind(this))}
             <br />
-          <button onClick={this.submitAvailability}> Submit </button>
+            <button className='available-button' onClick={this.submitAvailability}> Submit </button>
+          </div>
         </div>
       );
     }
     else {
       return (
-        <div className="availability">
-          <h1>Fill in your availability!</h1><br />
+        <div className="background">
+          <div className="availability">
+            <h1 className='title'>Fill in your availability!</h1><br />
             {hours.map(function (i) {
               return (
                 <div>
-                  <div className="timeslot" onClick={this.addTime.bind(null, i)}>
-                  {i}
+                  <div className={(this.state.times.indexOf(i) === -1 ? "timeslot" : "timeslot active")} onClick={this.addTime.bind(null, i)}>
+                    {i}
                   </div>
                 </div>
               )
             }.bind(this))}
             <br />
-          <button onClick={this.submitAvailability}> Submit </button>
+            <button className='available-button' onClick={this.submitAvailability}> Submit </button>
+          </div>
         </div>
-      )}
+      )
+    }
   }
 }
 export default Availability

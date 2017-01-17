@@ -10,6 +10,8 @@
 .timeslot {
     border: 1px solid silver;
     padding: 10px;
+    float: left;
+    width: 50%;
 }
 
 .active {
@@ -17,5 +19,22 @@
 }
 
 .timeslot:hover {
-    background-color: lightsalmon
+    background-color: lightpink;
+    cursor: pointer
+}
+
+.available-button {
+  color: salmon;
+  background-color: white;
+  border: 2px solid salmon;
+  padding: 10px;
+  border-radius: 20px;
+  margin-top: 20px;
+  width: 50%
+}
+
+.available-button:hover {
+  color: white;
+  background-color: salmon;
+  transition: 0.5s
 }
