@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 import Messages from './Messages.js';
 import '../styling/Results.css';
 import 'hint.css/hint.css'
-//import Bars from './Bars.js';
 var firebase = require('firebase');
 var axios = require('axios')
 
@@ -33,21 +32,13 @@ class Results extends Component {
     }).then(function(res) {
       this.setState(Object.assign({}, this.state, {signedIn: true}))
     }.bind(this))
-    // .then(function (res) {
-    //   this.props.router.push({
-    //     pathname: '/Results',
-    //     query: {
-    //       meetingId: this.props.location.query.meetingId
-    //     }
-    //   });
-    // }.bind(this));
   }
 
   componentWillMount() {
     var meetingID = (!this.props.location.query.meetingId ? localStorage.getItem("meetingId"): this.props.location.query.meetingId )
-    console.log(meetingID)
+
     this.setState(Object.assign({}, this.state, {meetingId: meetingID}))
-    //var meetingID = localStorage.getItem("meetingId")
+
     var slots = [
       { time: '7:00am', count: 0, people: [] },
       { time: '8:00am', count: 0, people: [] },
@@ -93,7 +84,7 @@ class Results extends Component {
                   <b>{slot.time}</b>, {slot.count} out of {numRsvps} are available.
               </div>
                 <div className="bar">
-                  <div className="fill" style={{ width: (slot.count / numRsvps * 100).toString() + '%' }}>
+                  <div className="fill" style={{ width: ((slot.count / numRsvps * 100).toString() + '%')}}>
                   </div>
                   <br />
                 </div>
@@ -111,7 +102,7 @@ class Results extends Component {
         <div className="background">
           <div className='centered-title' style={{ width: '95%' }}>
             <h1 className='title'> {this.state.meetingName} </h1> <br />
-            You're not signed in. Please <br/> <br/> <button className="title-button" onClick={this.authenticate}>Sign In</button>
+            You're not signed in. Please sign in below <br/> <br/> <button className="title-button" onClick={this.authenticate}>Sign In</button>
           </div>
         </div>
       )
@@ -127,9 +118,13 @@ class Results extends Component {
           <Messages user={localStorage.getItem('username')} id={this.state.meetingId} /> <br />
           <br />
           <div className="link">
-            <h4>Want to change your availability? click <a href={'http://localhost:3000/Availability?meetingId=' + localStorage.getItem('meetingId')}>here</a></h4>
+            <h3>Want to change your availability? Click <a href={'http://localhost:3000/Availability?meetingId=' + localStorage.getItem('meetingId')}>here</a></h3>
+            <br/>
             <h3>Want to check the status of this meeting later? Use this link: </h3>
-            <h5>http://localhost:3000/Results?meetingId={localStorage.getItem('meetingId')}</h5>
+            <h4>http://localhost:3000/Results?meetingId={localStorage.getItem('meetingId')}</h4>
+            <br/>
+            <h3> Share this link with your friends who need to set their availability: </h3>
+            <h4> http://localhost:3000/?meetingId={localStorage.getItem('meetingId')} </h4>
           </div>
         </div>
       )

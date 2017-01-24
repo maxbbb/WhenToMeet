@@ -41,7 +41,7 @@ class Messages extends Component {
     }
 
     render() {
-      if(!this.state.allMessages)
+      if (!this.state.allMessages)
         return (
           <div>Loading...</div>
         )
@@ -53,7 +53,7 @@ class Messages extends Component {
                           <div style={{ textAlign: (i.username === this.props.user ? 'right' : 'left') }}>
                               {i.username}
                           </div>
-                          <div className="message" style={{ backgroundColor: (i.username === this.props.user ? 'lightSalmon' : 'lightGrey') }}>
+                          <div className="message" style={{ backgroundColor: (i.username === this.props.user ? '#D1EEFC' : 'lightGrey') }}>
                               {i.message}
                           </div>
                           <br />

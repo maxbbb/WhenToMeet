@@ -3,6 +3,8 @@ var app = express();
 var fs = require("fs");
 var bodyParser = require("body-parser");
 
+app.use(express.static(__dirname + '/public'));
+
 app.use(bodyParser.json());
 // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,6 +32,7 @@ var meetingDb = {
       title: "Test meeting",
       creator: "brent@brentbaum.com",
       id: "test-meeting",
+      date: "12/09/19",
       rsvpList: [
         {
           user: "JGRohrlich",
@@ -90,11 +93,30 @@ app.post("/meeting/rsvp/:id", (req, res) => {
   return res.send(meetingDb.meetings[req.params.id]);
 });
 
+app.post("/meeting/createrrsvp/:id", (req, res) => {
+
+  var info = req.body.hourAvailability.timeslots
+  var bool = false
+  meetingDb.meetings[req.params.id].rsvpList.forEach(function(i) {
+    if (i.user === req.body.hourAvailability.user ) {
+      meetingDb.meetings[req.params.id].rsvpList[meetingDb.meetings[req.params.id].rsvpList.indexOf(i)].timeslots = info
+      bool = true
+      }
+    })
+
+    if (bool === false) {
+    meetingDb.meetings[req.params.id].rsvpList.push(req.body.hourAvailability)
+    }
+
+  meetingDb.meetings[req.params.id]['date'] = req.body.date
+  return res.send(meetingDb.meetings[req.params.id]);
+});
+
 app.get("/meeting/availability/:id", (req, res) => {
   //summarize rsvps in that meeting's rsvpList in whatever form makes sense for the client.
   var ID = req.params.id
   var data = meetingDb.meetings[ID]
-  console.log(meetingDb.meetings[ID])
+  
   return res.send(data);
 });
 

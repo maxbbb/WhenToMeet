@@ -1,11 +1,4 @@
 
-
-.mssageContainer {
-    float: right;
-    display: block;
-    padding: 20px
-}
-
 .messageContainer {
     position: fixed;
     width: 25%;
@@ -15,7 +8,8 @@
     border-right: 1px solid silver;
     border-top: 1px solid silver;
     border-radius: 3px;
-    padding: 15px
+    padding: 15px;
+    background-color: white
 }
 
 .message {
@@ -43,7 +37,8 @@
 
 .fill {
     height: 6px;
-    background-color: salmon
+    background-color: #81c784;
+    transition: 10s
 }
 
 #messageBox {

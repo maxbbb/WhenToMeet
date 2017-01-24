@@ -3,10 +3,6 @@ import '../styling/Home.css';
 import { Link } from 'react-router';
 var axios = require('axios');
 var firebase = require('firebase');
-// import {backendInit} from '../backend.js';
-//const auth = firebase.auth()
-
-// backendInit()
 
 var config = {
   apiKey: "AIzaSyCkYB_iq851Z8q2vy16PriXXVNAhDob5Ys",
@@ -17,12 +13,6 @@ var config = {
 };
 firebase.initializeApp(config);
 
-// firebase.auth().signOut().then(function() {
-//   // Sign-out successful.
-// }, function(error) {
-//   // An error happened.
-// });
-
 class Home extends Component {
   constructor(props) {
     super(props)
@@ -31,10 +21,6 @@ class Home extends Component {
 
   authenticate() {
 
-    // auth.signInWithEmailAndPassword(email, pass);
-    // auth.createUserWithEmailAndPassword(email, pass);
-    // auth.onAuthStateChanged(firebaseUser => {});
-
     var provider = new firebase.auth.GoogleAuthProvider();
 
     firebase.auth().signInWithPopup(provider).then(function (result) {
@@ -42,9 +28,8 @@ class Home extends Component {
       var token = result.credential.accessToken;
       // The signed-in user info.
       var user = result.user;
-      console.log(user.displayName, user.uid)
       return user
-      // .catch(e => console.log(e.message))
+
     })
       .then(function (res) {
         const api = axios.create({
@@ -52,7 +37,7 @@ class Home extends Component {
         });
         api.post('http://localhost:6969/user', { name: res.displayName, id: res.uid });
         localStorage.setItem('username', res.displayName)
-        localStorage.setItem('meetingId', (!this.props.location.query.meetingId? "": this.props.location.query.meetingId))
+        localStorage.setItem('meetingId', (!this.props.location.query.meetingId ? "" : this.props.location.query.meetingId))
         this.props.router.push({
           pathname: '/Start',
         });
@@ -64,7 +49,7 @@ class Home extends Component {
       <div className="background">
         <div className='centered-title'>
           <h1 className="big-title" style={{ marginBottom: '80px' }}> Welcome to Meetomorow!</h1> <br />
-          <button className="title-button" onClick={this.authenticate}>Sign In</button>
+          <button className="title-button" onClick={this.authenticate}> Sign In</button>
         </div>
       </div>
     );

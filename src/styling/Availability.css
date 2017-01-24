@@ -1,26 +1,30 @@
 
-
+.header {
+  text-align: center;
+}
 .availability {
     width: 60%;
     text-align: center;
     padding: 30px;
-    margin: auto
+    margin: auto;
+    float: left;
+    margin-left: 50px
 }
 
 .timeslot {
     border: 1px solid silver;
     padding: 10px;
     float: left;
-    width: 50%;
+    width: 350px;
 }
 
 .active {
-    background-color: salmon
+    background-color: #81c784
 }
 
 .timeslot:hover {
-    background-color: lightpink;
-    cursor: pointer
+    background-color: #c8e6c9;
+    cursor: pointer;
 }
 
 .available-button {
@@ -30,11 +34,20 @@
   padding: 10px;
   border-radius: 20px;
   margin-top: 20px;
-  width: 50%
+  width: 50%;
+
 }
 
 .available-button:hover {
   color: white;
   background-color: salmon;
   transition: 0.5s
+}
+
+.calendar {
+  display: inline-block;
+  margin-top: 70px;
+  margin-left: 70px
+
+
 }

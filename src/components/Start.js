@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { browserHistory, Router, Route, Link } from 'react-router'
 import '../styling/Start.css'
+const crypto = require('crypto');
 var axios = require('axios')
 
 const api = axios.create({
@@ -24,10 +25,10 @@ class Start extends Component {
 
   createMeeting(e) {
     e.preventDefault()
-    var meetingId = Math.floor(Math.random() * 10000000)
+    var meetingId = crypto.randomBytes(20).toString('hex')
     localStorage.setItem('meetingId', meetingId)
     localStorage.setItem('creator', 'true')
-    //crypto.randomBytes(10).toString('hex');
+
     var meetingDetails = {
       title: this.state.fieldValue,
       creator: localStorage.getItem('username'),
