@@ -2,12 +2,9 @@
 .messageContainer {
     position: fixed;
     width: 25%;
-    top: 25%;
-    right: 3%;
+    top: 0%;
+    right: 0%;
     border-left: 1px solid silver;
-    border-right: 1px solid silver;
-    border-top: 1px solid silver;
-    border-radius: 3px;
     padding: 15px;
     background-color: white
 }
@@ -21,8 +18,9 @@
 
 .timebars {
     width: 70%;
-    margin-right: 30%;
-    display: inline-block
+    margin-right: 25%;
+    display: inline-block;
+    margin-left: 3%
 }
 .slot {
     padding: 10px;
@@ -42,18 +40,30 @@
 }
 
 #messageBox {
-    height: 400px;
+    height: 590px;
     overflow: auto;
+}
+
+.send-message {
+    position: fixed;
+    width: 25%;
+    right: 0%;
+    height: 75px;
+    top: 590px;
+    background-color: white;
+    padding-left: 50px;
+    padding-top: 25px;
+    border-left: 1px solid silver;
+    border-top: 1px solid silver;
 }
 
 .message-button {
   color: salmon;
   background-color: white;
   border: 2px solid salmon;
-  padding: 10px;
+  padding: 4px;
   border-radius: 5px;
-  position: relative;
-  top: 400px
+
 }
 
 .message-button:hover {
@@ -66,12 +76,12 @@
   color: black;
   background-color: white;
   border: 2px solid silver;
-  padding: 10px;
+  padding: 4px;
   border-radius: 5px;
-  margin-left:10;
-  margin-bottom: 30px;
-  position: relative;
-  top: 400px
+  margin-left:0px;
+  margin-bottom: 10px;
+
+
 }
 
 .message-input:focus {
@@ -80,10 +90,31 @@
 }
 
 .link {
-    padding-left: 20px;
+    margin-left: 45px;
     padding-bottom: 20px
 }
 
 .timebars span{
     width: 33%
+}
+
+.meeting-title {
+  margin-left: 50px;
+  margin-right: 25%;
+  margin-bottom: 25px;
+  margin-top: 25px;
+  float: left;
+
+}
+
+.avail {
+  float: left;
+  margin-left: 20px;
+  margin-top: 20px
+}
+
+.avail-title {
+  margin-top: 35px;
+  margin-left: 10px;
+  float:left
 }

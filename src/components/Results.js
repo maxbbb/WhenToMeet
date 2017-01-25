@@ -109,7 +109,11 @@ class Results extends Component {
     } else {
       return (
         <div className="background">
-          <div className="centered-title" style={{ width: '95%' }}>
+          <a className="avail" href={'http://localhost:3000/Availability?meetingId=' + localStorage.getItem('meetingId')}>
+            <img height={'50px'} width={'50px'} src={"https://cdn3.iconfinder.com/data/icons/line/36/arrow_left-512.png"}/>
+          </a>
+          <h4 className='avail-title'> Click here to change your availability </h4>
+          <div className="meeting-title" >
             <h1 className='title'> {this.state.meetingName} </h1> <br />
           </div>
           <div className="timebars">
@@ -118,7 +122,6 @@ class Results extends Component {
           <Messages user={localStorage.getItem('username')} id={this.state.meetingId} /> <br />
           <br />
           <div className="link">
-            <h3>Want to change your availability? Click <a href={'http://localhost:3000/Availability?meetingId=' + localStorage.getItem('meetingId')}>here</a></h3>
             <br/>
             <h3>Want to check the status of this meeting later? Use this link: </h3>
             <h4>http://localhost:3000/Results?meetingId={localStorage.getItem('meetingId')}</h4>

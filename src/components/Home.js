@@ -49,7 +49,7 @@ class Home extends Component {
       <div className="background">
         <div className='centered-title'>
           <h1 className="big-title" style={{ marginBottom: '80px' }}> Welcome to Meetomorow!</h1> <br />
-          <button className="title-button" onClick={this.authenticate}> Sign In</button>
+          <button className="title-button" onClick={this.authenticate}> Sign In </button>
         </div>
       </div>
     );
