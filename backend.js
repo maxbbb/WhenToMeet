@@ -116,7 +116,7 @@ app.get("/meeting/availability/:id", (req, res) => {
   //summarize rsvps in that meeting's rsvpList in whatever form makes sense for the client.
   var ID = req.params.id
   var data = meetingDb.meetings[ID]
-  
+
   return res.send(data);
 });
 
@@ -132,10 +132,6 @@ app.post("/meeting/messages/:id", (req, res) => {
 });
 
 app.get("/meeting/")
-const appPort = 6969;
 
-app.listen(appPort, function () {
-  console.log("Meeting finder running on " + appPort);
-}).on("error", function (err) {
-  console.log(err);
-});
+
+app.listen(process.env.PORT || 5000)
