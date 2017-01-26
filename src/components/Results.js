@@ -109,7 +109,7 @@ class Results extends Component {
     } else {
       return (
         <div className="background">
-          <a className="avail" href={'http://localhost:3000/Availability?meetingId=' + localStorage.getItem('meetingId')}>
+          <a className="avail" href={'http://localhost:3002/Availability?meetingId=' + localStorage.getItem('meetingId')}>
             <img height={'50px'} width={'50px'} src={"https://cdn3.iconfinder.com/data/icons/line/36/arrow_left-512.png"}/>
           </a>
           <h4 className='avail-title'> Click here to change your availability </h4>

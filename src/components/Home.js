@@ -48,7 +48,7 @@ class Home extends Component {
     return (
       <div className="background">
         <div className='centered-title'>
-          <h1 className="big-title" style={{ marginBottom: '80px' }}> Welcome to Meetomorow!</h1> <br />
+          <h1 className="big-title" style={{ marginBottom: '80px' }}> Welcome to Let's Meet!</h1> <br />
           <button className="title-button" onClick={this.authenticate}> Sign In </button>
         </div>
       </div>
