@@ -15,7 +15,7 @@ class Messages extends Component {
         console.log(this.state.fieldValue)
     };
     componentWillMount() {
-        setInterval(() => api.get("http://localhost:6969/meeting/messages/" + this.props.id)
+        setInterval(() => api.get("http://localhost:5000/meeting/messages/" + this.props.id)
             .then(function (res) {
                 this.setState(Object.assign({}, this.state, {
                     allMessages: res.data
@@ -28,7 +28,7 @@ class Messages extends Component {
         var x = document.getElementsByName("message")   //sets value back to blank after search enter
         x[0].value = ''
         var message = { username: this.props.user, message: this.state.fieldValue }
-        api.post("http://localhost:6969/meeting/messages/" + this.props.id, message)
+        api.post("http://localhost:5000/meeting/messages/" + this.props.id, message)
             .then(function (res) {
                 this.setState(Object.assign({}, this.state, {
                     allMessages: res.data

@@ -66,7 +66,7 @@ class Availability extends Component {
             user: localStorage.getItem('username'),
             timeslots: this.state.times
         }
-        api.post("http://localhost:6969/meeting/rsvp/" + localStorage.getItem('meetingId'), availability).then(function(res) {
+        api.post("http://localhost:5000/meeting/rsvp/" + localStorage.getItem('meetingId'), availability).then(function(res) {
             this.props.router.push({pathname: '/Results'});
         }.bind(this));
 
@@ -82,7 +82,7 @@ class Availability extends Component {
           date: this.state.startDate
       }
 
-      api.post("http://localhost:6969/meeting/createrrsvp/" + localStorage.getItem('meetingId'), availability).then(function(res) {
+      api.post("http://localhost:5000/meeting/createrrsvp/" + localStorage.getItem('meetingId'), availability).then(function(res) {
           this.props.router.push({pathname: '/Results'});
       }.bind(this));
     }
@@ -93,7 +93,7 @@ class Availability extends Component {
 
     componentWillMount () {
 
-      api.get("http://localhost:6969/meeting/availability/" + localStorage.getItem('meetingId')).then(function(res) {
+      api.get("http://localhost:5000/meeting/availability/" + localStorage.getItem('meetingId')).then(function(res) {
         this.setState({date: res.data.date})
       }.bind(this))
     }

@@ -59,7 +59,7 @@ class Results extends Component {
       { time: '11:00pm', count: 0, people: [] },
       { time: '12:00am', count: 0, people: [] },]
     var numRsvps = 0
-    api.get('http://localhost:6969/meeting/availability/' + meetingID)
+    api.get('http://localhost:5000/meeting/availability/' + meetingID)
       .then(function (response) {
         console.log(response.data)
         console.log(numRsvps)

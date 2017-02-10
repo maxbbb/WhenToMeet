@@ -36,7 +36,7 @@ class Start extends Component {
       rsvpList: [],
       messageList: []
     }
-    api.post("http://localhost:6969/meeting/create", meetingDetails)
+    api.post("http://localhost:5000/meeting/create", meetingDetails)
     this.props.router.push({
       pathname: '/Availability',
     });

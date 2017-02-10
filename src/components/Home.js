@@ -35,7 +35,7 @@ class Home extends Component {
         const api = axios.create({
           responseType: "json"
         });
-        api.post('http://localhost:6969/user', { name: res.displayName, id: res.uid });
+        api.post('http://localhost:5000/user', { name: res.displayName, id: res.uid });
         localStorage.setItem('username', res.displayName)
         localStorage.setItem('meetingId', (!this.props.location.query.meetingId ? "" : this.props.location.query.meetingId))
         this.props.router.push({
